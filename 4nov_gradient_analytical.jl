@@ -20,7 +20,7 @@ function show_mask(grid)
     return x, y, z, c
 end
 
-grid = RegularRectilinearGrid(size=(128, 64),
+grid = RegularRectilinearGrid(size=(16, 8),
                               y=(-1, 1),                        
                               z=(-1, 0),                           
                               topology=(Flat, Periodic, Bounded))
@@ -135,7 +135,10 @@ tracer_final_tot = sum(interior(model.tracers.θ))*1/64*1/64
 
 G1 .= ∂y(model.tracers.θ) 
 G2 .= ∂z(model.tracers.θ)
-sqrt.(G1.^2 .+ G2.^2 )
+final_grad=sqrt.(G1.^2 .+ G2.^2 )
+grad_plot = contourf(yθ, zθ, (final_grad)[1, :, :]', title="final_grad", xlabel="y", ylabel="z")
+savefig(grad_plot, "final_grad.png")
+
 
 @info """
     Simulation complete.
