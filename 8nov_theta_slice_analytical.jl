@@ -5,6 +5,7 @@ using Oceananigans.ImmersedBoundaries: ImmersedBoundaryGrid, GridFittedBoundary
 using Oceananigans.BoundaryConditions: fill_halo_regions!
 using Plots
 using JLD2
+using LinearAlgebra
 using Oceananigans.ImmersedBoundaries: solid_node
 using Oceananigans.ImmersedBoundaries: mask_immersed_field!
 
@@ -137,6 +138,7 @@ tracer_final_tot = sum(interior(model.tracers.θ))*1/64*1/64
 G1 .= ∂y(model.tracers.θ) 
 G2 .= ∂z(model.tracers.θ)
 final_grad=sqrt.(G1.^2 .+ G2.^2 )
+norm(final_grad)
 grad_plot = contourf(yθ, zθ, (final_grad)[1, :, :]', title="final_grad", xlabel="y", ylabel="z")
 savefig(grad_plot, "final_grad.png")
 Ny = grid_with_seamount.grid.Ny
