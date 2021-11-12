@@ -116,7 +116,7 @@ G2 .= ∂z(model.tracers.θ)
 
 sqrt.(G1.^2 .+ G2.^2 )
 
-simulation = Simulation(model, Δt = Δt, stop_time = 0.3, progress = progress, iteration_interval = 10)
+simulation = Simulation(model, Δt = Δt, stop_time = 1, progress = progress, iteration_interval = 10)
 
 serialize_grid(file, model) = file["serialized/grid"] = model.grid.grid
 simulation.output_writers[:fields] = JLD2OutputWriter(model, model.tracers,
