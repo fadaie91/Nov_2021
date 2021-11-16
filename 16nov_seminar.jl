@@ -21,6 +21,13 @@ function show_mask(grid)
 
     return x, y, z, c
 end
+function nice_nondivergent_levels(c, clim; nlevels=20)
+    levels = range(0, stop=clim, length=nlevels)
+    cmax = maximum(abs, c)
+    clim < cmax && (levels = vcat([0], levels, [cmax]))
+    return (0, clim), levels
+end
+
 
 grid = RegularRectilinearGrid(size=(128, 64),
                               y=(-1, 1),                        
@@ -42,11 +49,22 @@ grid_with_seamount = ImmersedBoundaryGrid(grid, GridFittedBoundary(seamount))
 h(y)    = h0*exp(-y^2/L^2)
 ζ(y, z) = z/(h(y) - 1)
 set!(Ψ, (x, y, z) -> (1 - ζ(y, z))^2)
-fill_halo_regions!(Ψ, CPU())
+
 
 ### We mask psi
 mask_immersed_field!(Ψ)
+xs, ys, zs = nodes((Center, Face, Face), grid)
+#plt = contourf(ys, zs, interior(Ψ)[1,:,:]', xlabel = "y", ylabel = "z", title = "Stream Function")
+#savefig(plt,"stream-function.png")
+x, y, z, mask = show_mask(grid_with_seamount)
+Ψlims, Ψlevels = nice_nondivergent_levels(Ψ, 1)
+plt = heatmap(y, z, interior(mask)[1,:,:]', xlabel = "y", ylabel = "z", title = "Stream Function", color = :jet)
+contour!(plt, ys, zs, interior(Ψ)[1,:,:]', title="Ψ", xlabel="y", ylabel="z",
+         levels = Ψlevels, clim=Ψlims, color=:black, linewidth=1.5)
+savefig(plt, "Psi.png")
 
+fill_halo_regions!(Ψ, CPU())
+	
 ### V is (Center, Face, Center)
 V = YFaceField(CPU(), grid_with_seamount)
 ### W is (Center, Centere, Face)
