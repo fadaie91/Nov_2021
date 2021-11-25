@@ -73,7 +73,7 @@ mask_immersed_field!(W)
 velocities = PrescribedVelocityFields( v=V, w=W)
 
 model = HydrostaticFreeSurfaceModel(architecture = CPU(),  
-                                    momentum_advection = UpwindBiasedThirdOrder(),                         
+                                    tracer_advection = UpwindBiasedThirdOrder(),                         
                                     grid = grid_with_seamount,
                                     tracers = :θ,
                                    velocities = velocities,
