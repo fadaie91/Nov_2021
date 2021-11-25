@@ -257,3 +257,4 @@ analytical_error=(abs(tracer_initial_tot-tracer_final_tot)/tracer_initial_tot)*1
 D = Field(Center, Center, Center, CPU(), grid_with_seamount)
 D .= ∂y(V) + ∂z(W)
 interior(D)[1,:,:]
+maximum(interior(D)[1,:,:])
