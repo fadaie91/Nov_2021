@@ -29,7 +29,7 @@ function nice_nondivergent_levels(c, clim; nlevels=20)
 end
 
 
-grid = RegularRectilinearGrid(size=(128, 64),
+grid = RegularRectilinearGrid(size=(16, 6),
                               y=(-1, 1),                        
                               z=(-1, 0),                           
                               topology=(Flat, Periodic, Bounded))
